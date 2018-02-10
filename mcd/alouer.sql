@@ -37,18 +37,20 @@ CREATE TABLE al_disponibilite(
 CREATE TABLE al_logements(
         id_logement           Int NOT NULL ,
         nb_interieur          Varchar (15) ,
-        nb_civique            Varchar (15) NOT NULL ,
+        no_civique            Varchar (15) NOT NULL ,
+        apt                   Varchar (75) ,
         rue                   Varchar (75) NOT NULL ,
-        cod_post              Varchar (7) NOT NULL ,
-        province              Varchar (75) NOT NULL ,
         ville                 Varchar (75) NOT NULL ,
+        province              Varchar (75) NOT NULL ,
+        pays                  Varchar (75) NOT NULL ,
+        code_postal           Varchar (7) NOT NULL ,
+        lat                   Varchar (25) ,
+        lon                   Varchar (25) ,
         nb_persones           TinyINT ,
         nb_chambres           TinyINT ,
         nb_lits               TinyINT ,
         nb_salle_de_bain      TinyINT ,
-        nb_demi_salle_de_bain Int ,
-        lat                   Varchar (25) ,
-        lon                   Varchar (25) ,
+        nb_demi_salle_de_bain TinyINT ,
         description           Text NOT NULL ,
         est_staionnement      Bool ,
         est_wifi              Int ,
@@ -56,13 +58,13 @@ CREATE TABLE al_logements(
         est_tv                Bool ,
         est_fer_a_repasser    Bool ,
         est_cintres           Bool ,
-        est_seche_chevaux     Bool ,
-        est_clima             Bool ,
+        est_seche_cheveux     Bool ,
+        est_climatise         Bool ,
         est_laveuse           Bool ,
         est_secheuse          Bool ,
         est_chauffage         Bool ,
-        premiere__photo       Varchar (75) ,
-        notation_actuel       Int NOT NULL ,
+        premiere_photo        Varchar (75) ,
+        evaluation_actuel       Int NOT NULL ,
         l_banni               TinyINT ,
         l_date_banni          Date ,
         l_commentaire_banni   Text ,
@@ -137,7 +139,7 @@ CREATE TABLE al_usager(
         mot_de_passe        Char (25) NOT NULL ,
         u_banni             TinyINT ,
         u_commentaire_banni Text ,
-        u_date_banned       Date ,
+        u_date_banni        Date ,
         id_contact          Int NOT NULL ,
         id_type_usager      Int NOT NULL ,
         id_paiement         Int NOT NULL ,
@@ -152,7 +154,7 @@ CREATE TABLE al_usager(
 CREATE TABLE al_evaluations(
         id_evaluation       int (11) Auto_increment  NOT NULL ,
         commentaire         Text ,
-        date_notation       Date NOT NULL ,
+        date_evaluation     Date NOT NULL ,
         ponctuation         Int NOT NULL ,
         e_banni             TinyINT ,
         e_date_banni        Date ,
@@ -196,7 +198,7 @@ CREATE TABLE al_messagerie(
 # Table: assigner  destinataire
 #------------------------------------------------------------
 
-CREATE TABLE assigner__destinataire(
+CREATE TABLE assigner_destinataire(
         courriel   Varchar (25) NOT NULL ,
         id_message Int NOT NULL ,
         PRIMARY KEY (courriel ,id_message )
@@ -214,8 +216,8 @@ ALTER TABLE al_evaluations ADD CONSTRAINT FK_al_evaluations_courriel FOREIGN KEY
 ALTER TABLE al_evaluations ADD CONSTRAINT FK_al_evaluations_id_logement FOREIGN KEY (id_logement) REFERENCES al_logements(id_logement);
 ALTER TABLE al_photos_logement ADD CONSTRAINT FK_al_photos_logement_id_logement FOREIGN KEY (id_logement) REFERENCES al_logements(id_logement);
 ALTER TABLE al_messagerie ADD CONSTRAINT FK_al_messagerie_courriel FOREIGN KEY (courriel) REFERENCES al_usager(courriel);
-ALTER TABLE assigner__destinataire ADD CONSTRAINT FK_assigner__destinataire_courriel FOREIGN KEY (courriel) REFERENCES al_usager(courriel);
-ALTER TABLE assigner__destinataire ADD CONSTRAINT FK_assigner__destinataire_id_message FOREIGN KEY (id_message) REFERENCES al_messagerie(id_message);
+ALTER TABLE assigner_destinataire ADD CONSTRAINT FK_assigner_destinataire_courriel FOREIGN KEY (courriel) REFERENCES al_usager(courriel);
+ALTER TABLE assigner_destinataire ADD CONSTRAINT FK_assigner_destinataire_id_message FOREIGN KEY (id_message) REFERENCES al_messagerie(id_message);
 
 
 
@@ -238,7 +240,7 @@ INSERT INTO `type_logement` (`id_type_logement`, `type_logement`) VALUES
 (1, 'Maison unifamiliale'),
 (2, 'Condo / Loft'),
 (3, 'Chalet'),
-(4, '');
+(4, 'Chambre');
 
 -- --------------------------------------------------------
 
@@ -251,7 +253,8 @@ INSERT INTO `type_logement` (`id_type_logement`, `type_logement`) VALUES
 INSERT INTO `type_paiement` (`id_paiement`, `paiement`) VALUES
 (1, 'Interact'),
 (2, 'Paypal'),
-(3, 'Carte Crédit');
+(3, 'MasterCard'), 
+(4, 'Visa');
 
 -- --------------------------------------------------------
 
